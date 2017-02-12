@@ -22,3 +22,5 @@ help6 a (b, c) d  = (c, d, b)
 help7 a (b, c) d  = (c, a, a)
 
 test pair = fst pair
+
+-- uncurry (flip (,))
