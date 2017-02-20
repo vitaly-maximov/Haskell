@@ -58,3 +58,12 @@ perms xs = concatMap (\ (x, rs) -> map (x :) $ perms rs) $ iterate [] xs
 
 delAllUpper :: String -> String
 delAllUpper = unwords . filter (any isLower) . words
+
+{-
+max3 [7,2,9] [3,6,8] [1,8,10]
+[7,8,10]
+-}
+
+max3 :: Ord a => [a] -> [a] -> [a] -> [a]
+max3 [] [] [] = []
+max3 (a : as) (b : bs) (c :cs) = (max a (max b c)) : max3 as bs cs
