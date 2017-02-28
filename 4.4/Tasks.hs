@@ -39,18 +39,3 @@ maybeToList (Just x) = [x]
 listToMaybe :: [a] -> Maybe a
 listToMaybe [] = Nothing
 listToMaybe (x : _) = Just x
-
-
-data Error = ParsingError | IncompleteDataError | IncorrectDataError String
-	deriving (Show)
-
-data Person = Person { firstName :: String, lastName :: String, age :: Int }
-	deriving (Show)
-
-parsePerson :: String -> Either Error Person
-parsePerson str = Right $ Person (get "firstName") (get "lastName") (get "age") where
-	records = lines str
-
-	get field = case find (\ (name : _) -> name == field) records of
-		Nothing -> Nothing
-		Just [_, _, value] -> Just value
