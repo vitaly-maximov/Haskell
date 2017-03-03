@@ -63,8 +63,9 @@ data Expr = Val Int | Expr :+: Expr | Expr :*: Expr
     deriving (Show, Eq)
 
 expand :: Expr -> Expr
-expand ((e1 :+: e2) :*: e) = expand e1 :*: expand e :+: expand e2 :*: expand e
-expand (e :*: (e1 :+: e2)) = expand e :*: expand e1 :+: expand e :*: expand e2
 expand (e1 :+: e2) = expand e1 :+: expand e2
-expand (e1 :*: e2) = expand e1 :*: expand e2
+expand e@(e1 :*: e2) = case (expand e1, expand e2) of
+	((e11 :+: e12), e2') -> expand $ e11 :*: e2' :+: e12 :*: e2'
+	(e1', e2'@(e21 :+: e22)) -> expand $ e1' :*: e21 :+: e1' :*: e22
+	_ -> e
 expand e = e
