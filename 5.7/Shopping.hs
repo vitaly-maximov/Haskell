@@ -1,15 +1,14 @@
 import Data.Monoid
 import Control.Monad.Writer
 
-evalWriter :: Writer w a -> a
-evalWriter = fst . runWriter
-
 {-
 GHCi> total shopping1 
 19708
+GHCi> items shopping1
+["Jeans","Water","Lettuce"]
 -}
 
-type Shopping = Writer (Sum Integer) ()
+type Shopping = Writer (Sum Integer, [String]) ()
 
 shopping1 :: Shopping
 shopping1 = do
@@ -18,7 +17,10 @@ shopping1 = do
   purchase "Lettuce"   328
 
 purchase :: String -> Integer -> Shopping
-purchase item cost = tell $ Sum cost
+purchase item cost = tell (Sum cost, [item])
 
 total :: Shopping -> Integer
-total = getSum . execWriter
+total = getSum . fst . execWriter
+
+items :: Shopping -> [String]
+items = snd. execWriter

@@ -36,3 +36,22 @@ Leaf (Just ["a","b"])
 instance Functor Tree where
     fmap f (Leaf a) = Leaf $ fmap f a    
     fmap f (Branch left a right) = Branch (fmap f left) (fmap f a) (fmap f right)
+
+
+data Entry k1 k2 v = Entry (k1, k2) v  deriving Show
+data Map k1 k2 v = Map [Entry k1 k2 v]  deriving Show
+
+{-
+fmap (map toUpper) $ Map []
+Map []
+
+fmap (map toUpper) $ Map [Entry (0, 0) "origin", Entry (800, 0) "right corner"]
+Map [Entry (0,0) "ORIGIN",Entry (800,0) "RIGHT CORNER"]
+-}
+
+instance Functor (Entry k1 k2) where
+    fmap f (Entry keys value) = Entry keys $ f value
+
+instance Functor (Map k1 k2) where    
+    fmap f (Map entries) = Map $ fmap (fmap f) entries
+    	
