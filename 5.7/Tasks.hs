@@ -1,5 +1,7 @@
 import Data.Monoid
 import Control.Monad.Writer
+import Control.Monad.Reader
+import Control.Monad.State
 
 evalWriter :: Writer w a -> a
 evalWriter = fst . runWriter
@@ -22,3 +24,6 @@ purchase item cost = tell $ Sum cost
 
 total :: Shopping -> Integer
 total = getSum . execWriter
+
+readerToState :: Reader r a -> State r a
+readerToState m = state (\ r -> (runReader m r, r))
